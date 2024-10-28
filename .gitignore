@@ -383,6 +383,10 @@ zig-out/
 **/.idea/**/dictionaries
 **/.idea/**/shelf
 
+**/.idea/editor.xml
+**/.idea/misc.xml
+**/.idea/vcs.xml
+
 # AWS User-specific
 **/.idea/**/aws.xml
 
