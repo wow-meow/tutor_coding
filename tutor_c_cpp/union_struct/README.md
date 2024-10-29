@@ -8,7 +8,7 @@
 
 64 bit computers have 8 byte pointers. if you vary str[] you will see it increases by increments of 8. (`char str[9]` returns size 16).
 
-https://blog.csdn.net/firefly_2002/article/details/7954458
+[CSDN_explain](https://blog.csdn.net/firefly_2002/article/details/7954458)
 
 结论：复合数据类型，如union, struct, class的对齐方式为成员中对齐方式最大的成员的对齐方式。
 
@@ -22,6 +22,7 @@ What about 64-bit C/C++?
 
 更改一下上面的程序：
 
+``` cpp
 #pragma pack(2)
 union u2 {
 　char a[13];
@@ -36,8 +37,11 @@ union u3 {
 
 cout<<sizeof(u2)<<endl; // 14 由于手动更改对界方式为2，所以int的对界也变成了2，u2的对界取成员中最大的对界，也是2了，所以此时sizeof(u2)=14。
 cout<<sizeof(u3)<<endl; // 13 ，char的对界为1
+```
 
 结论：C++固有类型的对界取编译器对界方式与自身大小中较小的一个。
 
-[你所不知道的 C 語言：記憶體管理、對齊及硬體特性 - HackMD](https://hackmd.io/@sysprog/c-memory)
-
+- [你所不知道的 C 語言：記憶體管理、對齊及硬體特性 - HackMD](https://hackmd.io/@sysprog/c-memory) 
+- [Structure Member Alignment, Padding and Data Packing - GeeksforGeeks](https://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/)
+- [Structure Alignment and Packing in C Programming | Tachyon](https://grandidierite.github.io/structure-alignment-and-packing-in-C-programming/)
+ 
