@@ -1,8 +1,8 @@
+//#define STRERROR
 #define BASIC1
-#define BASIC2
-#define STRERROR
-#define NOMUTEX
-#define MUTEX
+//#define BASIC2
+//#define NOMUTEX
+//#define MUTEX
 #define SYNC
 //#define SYNC0
 
@@ -15,16 +15,16 @@
 // create a global variable to change it in threads
 int g_num = 0;
 int g_counter1 = 0;
-int g_counter_tid_arr2 = 0;
-int g_counter_tid_arr3 = 0;
+int g_counter_for_tid_arr2 = 0;
+int g_counter_for_tid_arr3 = 0;
 //volatile int g_counter_tid_arr3 = 0; // volatile keyword is VERY IMPORTANT
 
 int g_N_tid_arr3; // malloc tid_arr3[]
 
 // mutual exclusive, that is, lock of shared resources
-pthread_mutex_t g_mutex_tid_arr2;
-pthread_mutex_t g_mutex_tid_arr3 = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t* g_cond_tid_arr3 = NULL; // pointer
+pthread_mutex_t g_mutex_for_tid_arr2;
+pthread_mutex_t g_mutex_for_tid_arr3 = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t* g_cond_for_tid_arr3 = NULL; // pointer
 
 // a normal function that is executed as a thread, when its name is specified in pthread_create()
 void *func1_thread(void *args) {
@@ -64,16 +64,16 @@ void *func3_thread(void *args) {
 }
 
 void *func4_thread(void *args) {
-    pthread_mutex_lock(&g_mutex_tid_arr2);
+    pthread_mutex_lock(&g_mutex_for_tid_arr2);
 
-    g_counter_tid_arr2 += 1;
-    printf("With Mutex: Job %d has started.\n", g_counter_tid_arr2);
+    g_counter_for_tid_arr2 += 1;
+    printf("With Mutex: Job %d has started.\n", g_counter_for_tid_arr2);
     for (unsigned long i = 0; i < (0x0FFFFFFF); ++i) {
         // wait
     }
-    printf("With Mutex: Job %d has finished.\n", g_counter_tid_arr2);
+    printf("With Mutex: Job %d has finished.\n", g_counter_for_tid_arr2);
 
-    pthread_mutex_unlock(&g_mutex_tid_arr2);
+    pthread_mutex_unlock(&g_mutex_for_tid_arr2);
     return NULL;
 }
 
@@ -82,28 +82,28 @@ void *func5_thread(void *args) {
     tidno = *(int *)args;
     int cnt_while = 0;
     while (true) {
-        pthread_mutex_lock(&g_mutex_tid_arr3);
+        pthread_mutex_lock(&g_mutex_for_tid_arr3);
 
         // g_counter_tid_arr3 is used to determined which thread should
         // enter into the critical section, that is, printf() + update counter statement
-        if (tidno != g_counter_tid_arr3) {
-            pthread_cond_wait(&g_cond_tid_arr3[tidno], &g_mutex_tid_arr3);
+        if (tidno != g_counter_for_tid_arr3) {
+            pthread_cond_wait(&g_cond_for_tid_arr3[tidno], &g_mutex_for_tid_arr3);
         }
 
         // pthread_cond_signal
         printf("%d ", 1 + tidno);
 
         // determine which thread need to be scheduled now
-        if (g_counter_tid_arr3 < g_N_tid_arr3 - 1) {
-            g_counter_tid_arr3 += 1;
+        if (g_counter_for_tid_arr3 < g_N_tid_arr3 - 1) {
+            g_counter_for_tid_arr3 += 1;
         }
         else {
-            g_counter_tid_arr3 = 0; // loop back
+            g_counter_for_tid_arr3 = 0; // loop back
         }
 
         // wake up next thread
-        pthread_cond_signal(&g_cond_tid_arr3[g_counter_tid_arr3]); // wake up
-        pthread_mutex_unlock(&g_mutex_tid_arr3); // unlock shared resource
+        pthread_cond_signal(&g_cond_for_tid_arr3[g_counter_for_tid_arr3]); // wake up
+        pthread_mutex_unlock(&g_mutex_for_tid_arr3); // unlock shared resource
 
         ++cnt_while;
     }
@@ -150,19 +150,17 @@ void* func6_thread(void* args) {
     return NULL;
 }
 
-int main() {
+int main(void) {
     printf("\n== Learn Multithreading ==\n");
 
 #ifdef STRERROR
     printf("\n=== Error Code ===\n\n");
-
-    printf("Error Code [%d] : [%s]\n", errno, strerror(errno));
+    printf("Test if MACRO 'errno' is valid\nError Code [%d] : [%s]\n\n", errno, strerror(errno));
 
     int errnum_arr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-    //for (auto errnum: errnum_arr) {
-    //    printf("Error Code [%d] : [%s]\n", errnum, strerror(errnum));
-    //}
-    int len_arr = sizeof(errnum_arr) / sizeof(*errnum_arr);
+    // int len_arr = sizeof(errnum_arr) / sizeof(*errnum_arr);
+    int len_arr = *(&errnum_arr + 1) - errnum_arr;
+    printf("len_arr: %d\n", len_arr);
     for (int i = 0; i < len_arr; ++i) {
         printf("Error Code [%d] : [%s]\n",
             errnum_arr[i], strerror(errnum_arr[i]));
@@ -217,20 +215,9 @@ int main() {
         }
     }
 
-    //for (auto tid: tid_arr1) {
-    //    int errnum = pthread_create(&tid, NULL, &func3_thread, NULL);
-    //    if (errnum != 0) {
-    //        printf("Thread cannot be created : [%s]\n", strerror(errnum));
-    //    }
-    //}
-
     for (int i = 0; i < N_tids; ++i) {
         pthread_join(tid_arr1[i], NULL);
     }
-
-    //for (const auto tid: tid_arr1) {
-    //    pthread_join(tid, NULL);
-    //}
 #endif // NOMUTEX
 
 #ifdef MUTEX
@@ -254,20 +241,9 @@ int main() {
         }
     }
 
-    //for (auto tid: tid_arr2) {
-    //    int errnum = pthread_create(&tid, NULL, &func4_thread, NULL);
-    //    if (errnum != 0) {
-    //        printf("Thread cannot be created : [%s]\n", strerror(errnum));
-    //    }
-    //}
-
     for (int i = 0; i < N_tid_arr2; ++i) {
         pthread_join(tid_arr2[i], NULL);
     }
-
-    //for (const auto tid: tid_arr2) {
-    //    pthread_join(tid, NULL);
-    //}
 
     pthread_mutex_destroy(&g_mutex_tid_arr2);
 #endif // MUTEX
@@ -279,7 +255,7 @@ int main() {
     scanf("%d", &g_N_tid_arr3);
 
     // allocate memory to "conditional variable" array
-    g_cond_tid_arr3 = (pthread_cond_t *) malloc(g_N_tid_arr3 * sizeof(pthread_cond_t));
+    g_cond_for_tid_arr3 = (pthread_cond_t *) malloc(g_N_tid_arr3 * sizeof(pthread_cond_t));
 
     // allocate memory to thread identifiers
     pthread_t *tid_arr3;
@@ -291,7 +267,7 @@ int main() {
 
     // initialize conditional variables
     for (int i = 0; i < g_N_tid_arr3; ++i) {
-        if (pthread_cond_init(&g_cond_tid_arr3[i], NULL) != 0) {
+        if (pthread_cond_init(&g_cond_for_tid_arr3[i], NULL) != 0) {
             perror("pthread_cond_init failed");
             printf("%d : [%s]\n", errno, strerror(errno));
             exit(1);
@@ -311,10 +287,10 @@ int main() {
     }
 
     // free memory, then remove dangling pointers
-    free(g_cond_tid_arr3);
+    free(g_cond_for_tid_arr3);
     free(tid_arr3);
     free(arg_tid_arr3);
-    g_cond_tid_arr3 = NULL;
+    g_cond_for_tid_arr3 = NULL;
     tid_arr3 = NULL;
     arg_tid_arr3 = NULL;
 #endif // SYNC
@@ -359,4 +335,5 @@ int main() {
 
     pthread_exit(NULL);
     return 0;
+    //exit(EXIT_SUCCESS);
 }
