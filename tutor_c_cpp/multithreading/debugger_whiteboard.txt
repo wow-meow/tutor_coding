@@ -1,0 +1,22 @@
+Thread 0:
+
+param = {param_t *} 0x5ffd40
+->thIndex = 0
+->numCopies = 1
+->stemStr = {char *} 0x1b17c0 "John"
+->separator = {char *} 0x1b1800 "_"
+
+res = {string_t *} 0x1b1b20
+->data = {char *} 0x1b4ab0
+
+
+Thread 1:
+
+param = {param_t *} 0x5ffd58
+->thIndex = 1
+->numCopies = 3
+->stemStr = {char *} 0x1b1aa0 "John"
+->separator = {char *} 0x1b1ae0 "_"
+
+res = {string_t *} 0x1b4d00
+->data = {char *} 0x1b4f80
