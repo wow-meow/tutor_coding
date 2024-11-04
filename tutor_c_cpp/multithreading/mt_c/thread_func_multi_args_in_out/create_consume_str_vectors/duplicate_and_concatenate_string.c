@@ -129,7 +129,7 @@ int create_join_thread_duplicateAndConcatenate(int numThreads, const char stemSt
         free(str);
     }
 
-    pthread_exit(NULL);
+    //pthread_exit(NULL);
     return 0;
 }
 
@@ -152,7 +152,7 @@ void *duplicateAndConcatenate_thfunc(void *arg)
          param->stemStr, param->separator, param->numCopies);
     if (err != 0) {
         fprintf(stderr, "\nErrcode %d: duplicateAndConcatenate()\n", err);
-        //pthread_exit(NULL);
+        pthread_exit(NULL);
         return NULL;
     }
 

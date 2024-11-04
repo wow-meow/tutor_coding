@@ -22,7 +22,6 @@
  */
 int create_join_thread_createStringVector(int numThreads, const char stemStr[], const char separator[])
 {
-    //const int N_threads = 5;
     pthread_t tids[numThreads] = {};
     printf("\npthread_t tid[%d]: (init)\n", numThreads);
     for (int i = 0; i < numThreads; ++i) {
@@ -113,7 +112,7 @@ int create_join_thread_createStringVector(int numThreads, const char stemStr[], 
         free(str_vec);
     }
 
-    pthread_exit(NULL);
+    //pthread_exit(NULL);
     return 0;
 }
 

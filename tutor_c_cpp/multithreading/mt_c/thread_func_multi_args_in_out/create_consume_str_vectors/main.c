@@ -24,17 +24,18 @@ int main(void)
 
     int err = 0;
 
-    //err = create_join_thread_createStringVector(2, "Jerry", ".");
+    err = create_join_thread_createStringVector(2, "Jerry", ".");
     //err = create_join_thread_createStringVector(2, name, separator);
-    //if (err != 0) {
-    //    fprintf(stderr, "errcode %d: create_join_thread_createStringVector\n", err);
-    //}
+    if (err != 0) {
+        fprintf(stderr, "errcode %d: create_join_thread_createStringVector\n", err);
+    }
 
-    //err = create_join_thread_duplicateAndConcatenate(2, "Tom", "-");
-    err = create_join_thread_duplicateAndConcatenate(2, name, separator);
-    //if (err != 0) {
-    //    fprintf(stderr, "errcode %d: create_join_thread_createStringVector\n", err);
-    //}
+    err = create_join_thread_duplicateAndConcatenate(2, "Tom", "-");
+    //err = create_join_thread_duplicateAndConcatenate(2, name, separator);
+    if (err != 0) {
+        fprintf(stderr, "errcode %d: create_join_thread_createStringVector\n", err);
+    }
 
+    pthread_exit(NULL);
     return err;
 }
