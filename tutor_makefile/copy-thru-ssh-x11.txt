@@ -1,0 +1,24 @@
+Copy/paste into SSH'd VIM from local (Windows) clipboard
+
+$ echo $DISPLAY
+//find that: DISPLAY is locahost:10.0
+
+$ tmux attach
+$ echo $DISPLAY
+//find that in TMUX: DISPLAY is locahost:14.0
+
+$ export DISPLAY=localhost:10.0
+//change it back to localhost:10.0
+
+
+into SSH'dinto SSH'dinto SSH'dinto SSH'd
+into SSH'dinto SSH'dinto SSH'dinto SSH'd
+into SSH'dinto SSH'dinto SSH'dinto SSH'd
+into SSH'dinto SSH'dinto SSH'dinto SSH'd
+into SSH'dinto SSH'dinto SSH'dinto SSH'd
+into SSH'dinto SSH'dinto SSH'dinto SSH'd
+
+Hello, World!
+Hello, World!
+Hello, World!
+

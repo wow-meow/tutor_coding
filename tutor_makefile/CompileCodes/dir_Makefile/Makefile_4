@@ -1,0 +1,20 @@
+CC = gcc
+TARGET = main.out
+OBJS = $(patsubst %c, %o, $(wildcard *.c))
+
+$(TARGET): $(OBJS)
+	@echo "linking $^ using $(CC)"
+	$(CC) -o $(TARGET) $(OBJS)
+
+# 模式匹配规则：当make需要目标 xyz.o 时，自动生成一条 xyz.o: xyz.c 规则:
+%.o: %.c
+	@echo "compiling $< using $(CC)"
+	$(CC) -c -o $@ $<
+	@echo
+
+.PHONY: clean
+clean:
+	@echo "removing $(OBJS) $(TARGET)"
+	rm -f $(OBJS) $(TARGET)
+	@echo
+

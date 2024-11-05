@@ -1,0 +1,48 @@
+## $ sudo apt install gcc-14-riscv64-linux-gnu
+CC = riscv64-linux-gnu-gcc
+#CC = gcc
+
+TARGET = main.out
+
+#BUILD_DIR  = build
+#SRC_DIR = src
+BUILD_DIR = .
+SRC_DIR = .
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+
+#OBJS = build/hello.o build/main.o
+#OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(wildcard *.c))
+OBJS = $(patsubst %.c, %.o, $(wildcard *.c))
+
+test1: $(OBJS)
+	echo "SRCS:" $(SRCS) "\n"
+	echo "OBJS:" $(OBJS) "\n"
+	echo "$$@:" $@ "\n"
+	echo "$$<:" $< "\n"
+	echo "$$^:" $^ "\n"
+
+# create the executable
+#main.out: main.o hello.o
+#	cc -o main.out main.o hello.o 
+#$(TARGET): $(OBJS)
+#	cc -o $(TARGET) $(OBJS)
+#
+$(TARGET): $(OBJS)
+	echo "$$@:" $@ "\n"
+	echo "$$<:" $< "\n"
+	echo "$$^:" $^ "\n"
+	$(CC) -o $(TARGET) $(OBJS)
+
+## compile main.c
+#main.o: main.c hello.h
+#	cc -c main.c
+#
+## compile hello.c
+#hello.o: hello.c
+#	cc -c hello.c
+
+.PHONY: clean
+clean:
+	rm -f $(BUILD_DIR)/*.o
+	rm -f $(TARGET) #rm -f main.out
+

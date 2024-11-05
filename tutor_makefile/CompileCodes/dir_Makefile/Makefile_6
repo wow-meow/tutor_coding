@@ -1,0 +1,58 @@
+TARGET = main.out
+CC := gcc
+
+# 列出所有 .c 文件:
+SRCS = $(wildcard *.c)
+
+# 根据SRCS生成 .o 文件列表:
+OBJS = $(SRCS:.c=.o)
+#OBJS = $(patsubst %.c, %.o, $(SRCS))
+
+# 根据SRCS生成 .d 文件列表:
+DEPS = $(SRCS:.c=.d)
+#DEPS = $(patsubst %.c, %.d, $(SRCS))
+
+# The default final target
+all: $(TARGET)
+
+# Linking OBJS and create the final target output
+$(TARGET): $(OBJS)
+	@echo '-- Building $@: Linking OBJS and create the final target output'
+	$(CC) -o $@ $^
+	@echo
+
+# xyz.d 的规则由 xyz.c 生成:
+%.d: %.c
+	@echo '-- Generating dependencies for $<'
+	rm -f $@; \
+	$(CC) -MM $< > $@.tmp; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.tmp > $@; \
+	rm -f $@.tmp
+	@echo
+
+# 模式规则:
+%.o: %.c
+	@echo '-- Building $@ <-- $< according to Pattern rules'
+	$(CC) -c -o $@ $<
+	@echo
+
+.PHONY: test1
+test1:
+	@echo '-- Test1'
+	@echo 'CC: $(CC)'
+	@echo 'SRCS: $(SRCS)'
+	@echo 'OBJS: $(OBJS)'
+	@echo 'DEPS: $(DEPS)'
+	@echo
+
+.PHONY: clean
+clean:
+	@echo '-- Cleaning ... '
+	rm -rf $(OBJS) $(DEPS) $(TARGET)
+	@echo
+
+# Include the .d makefiles. 
+# The - at the front suppresses the errors of missing Makefiles. Initially, all
+# the .d files will be missing, and we don't want those errors to show up.
+include $(DEPS)
+#-include $(DEPS)

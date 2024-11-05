@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * - initialize char str[LEN] = {0} with the null terminator
  * - the writable size of string buffer: len_src + 1, to include the null terminator '\0'
@@ -6,6 +7,8 @@
  *
  **/
 
+=======
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
 #include <stdio.h>
 #include <string.h> // strcpy, strncpy, strlcpy
 //#include <_bsd_types.h>
@@ -20,7 +23,12 @@ void concatStr(char *dest, const char *src) {
     size_t len_dest = strlen(dest);
     size_t len_src = strlen(src);
     printf("len_dest = %ld, len_src = %ld\n", len_dest, len_src);
+<<<<<<< HEAD
     memmove(dest + len_dest, src, len_src + 1); // +1 to include the null terminator '\0'
+=======
+    // +1 to include the null terminator '\0'
+    memmove(dest + len_dest, src, len_src + 1);
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
 }
 
 int main() {
@@ -36,14 +44,23 @@ int main() {
     char str3[30] = {0}; // 0 means '\0' the NULL terminator
     printf("str3: %s\n", str3);
     printf("strlen(str3): %ld\n", strlen(str3));
+<<<<<<< HEAD
     //strlcpy(str3, str1, 1 + strlen(str1)); // +1 to include the null terminator '\0'
     strncpy(str3, str1, 1 + strlen(str1)); // +1 to include the null terminator '\0'
+=======
+    strlcpy(str3, str1, 1 + strlen(str1)); // +1 to include the null terminator '\0'
+    //strncpy(str3, str1, 1 + strlen(str1)); // +1 to include the null terminator '\0'
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
     strcat(str3, str2);
     printf("str3: %s\n", str3);
     printf("strlen(str3): %ld\n", strlen(str3));
 
     printf("\n=== str4 ===\n");
+<<<<<<< HEAD
     char str4[30] = {0}; // identical to '\0'
+=======
+    char str4[30] = {0};
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
     printf("str4: %s\n", str4);
     printf("strlen(str4): %ld\n", strlen(str4));
     printf("str1: %s\n", str1);
@@ -60,8 +77,13 @@ int main() {
 
     struct Person person2;
     printf("strlen(person2.m_name): %ld\n", strlen(person2.m_name));
+<<<<<<< HEAD
     //strlcpy(person2.m_name, "Thomas", 20);
     strncpy(person2.m_name, "Thomas", 20);
+=======
+    strlcpy(person2.m_name, "Thomas", 20);
+    // strncpy(person2.m_name, "Thomas", 20);
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
     printf("person2.m_name: %s\n", person2.m_name);
     printf("strlen(person2.m_name): %ld\n", strlen(person2.m_name));
 
@@ -72,13 +94,18 @@ int main() {
     const char str7[6] = {'H', 'e', 'l', 'l', 'o', '_'};
     printf("str7: %s\n", str7);
 
+<<<<<<< HEAD
     printf("\n=== str8 ===\n");
     char str8[50] = {0};
     printf("str8: %s\n", str8);
+=======
+    char str8[50];
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
     int len_formatstr = 0;
     len_formatstr = sprintf(str8, "%s-%s", str1, str2);
     printf("len_formatstr (excluding '\\0'): %d | result-str: %s\n",
         len_formatstr, str8);
+<<<<<<< HEAD
     int size_writable = 14; // including the null terminator
     len_formatstr = snprintf(str8, size_writable, "%s-%s", str1, str2);
     printf("len_formatstr (excluding '\\0'): %d | result-str: %s\n",
@@ -86,6 +113,14 @@ int main() {
     if (size_writable < 1 + len_formatstr) {
         fputs("Buffer size exceeded, string truncated\n", stderr);
         fprintf(stderr, "Buffer size exceeded, string truncated\n");
+=======
+    int size_buffer = 14; // including the null terminator
+    len_formatstr = snprintf(str8, size_buffer, "%s-%s", str1, str2);
+    printf("len_formatstr (excluding '\\0'): %d | result-str: %s\n",
+        len_formatstr, str8);
+    if (size_buffer < 1 + len_formatstr) {
+        fputs("Buffer size exceeded, string truncated", stderr);
+>>>>>>> 3b3ae9f (initial commit: added previously created directories: 'tutor_c_cpp/', 'tutor_linux_cli/', 'tutor_makefile/', 'tutor_python/')
     }
     printf("Joined string: %s\n", str8);
 

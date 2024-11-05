@@ -1,0 +1,25 @@
+TARGET = main.out
+
+CC = gcc
+SRCS = $(wildcard *.c)
+OBJS = $(SRCS:.c=.o)
+DEPS = $(SRCS:.c=.d)
+
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^
+
+%.o: %.c
+	$(CC) -c -o $@ $<
+
+.PHONY: test1
+test1:
+	@echo 'CC: $(CC)'
+	@echo 'SRCS: $(SRCS)'
+	@echo 'OBJS: $(OBJS)'
+
+.PHONY: clean
+clean:
+	rm -f $(OBJS) $(DEPS) $(TARGET)
+
+include $(DEPS)
+
