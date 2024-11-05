@@ -10,17 +10,26 @@ typedef struct MyString {
     char *data;
 } string_t;
 
-int duplicateAndConcatenate(char **res, int *ptr_len_res,
-    const char src[], const char separator[], int n_copies);
+int duplicateAndConcatenate(
+    char **res, int *ptr_len_res,
+    const char src[], const char separator[],
+    int n_copies);
 
 typedef void *(*thread_func_t)(void *);
+
 void *sayHelloToSomeone_cstring_thfunc(void *arg);
+
 void *sayHelloToSomeone_string_t_thfunc(void *arg);
 
-int create_join_thread_cstring(void *rets[], int n_threads, thread_func_t thread_func,
-    const char src[], const char separator[]);
-int create_join_thread_string_t(void *rets[], int n_threads, thread_func_t thread_func,
-    const char src[], const char separator[]);
+int create_join_thread_cstring(
+    void *thread_return_args[], pthread_t tids[], int n_threads,
+    const pthread_attr_t *th_attr, thread_func_t thread_func, const char src[],
+    const char separator[]);
+
+int create_join_thread_string_t(
+    void *thread_return_args[], pthread_t tids[], int n_threads,
+    const pthread_attr_t *th_attr, thread_func_t thread_func, const char src[],
+    const char separator[]);
 
 
 int main(void)
@@ -29,34 +38,42 @@ int main(void)
 
     printf("\n=== {char *} ===\n\n");
 
-    const int n_threads = 2;
-    void *rets[n_threads] = {};
+    const int N_threads = 2;
+    pthread_t tids[N_threads] = {};
+
+    pthread_attr_t th_attr;
+    pthread_attr_init(&th_attr);
+    pthread_attr_setschedpolicy(&th_attr, SCHED_FIFO);
+
+    void *thread_return_args[N_threads] = {};
     int err = 0;
 
-    err = create_join_thread_cstring(rets, n_threads, sayHelloToSomeone_cstring_thfunc, "Jerry", ".");
+    err = create_join_thread_cstring(thread_return_args, tids, N_threads, &th_attr, sayHelloToSomeone_cstring_thfunc,
+                                     "Jerry", ".");
     printf("err: %d\n", err);
 
     /**
      * print out results
      **/
 
-    for (int i = 0; i < n_threads; ++i) {
-        char *res = (char *) rets[i];
+    for (int i = 0; i < N_threads; ++i) {
+        char *res = (char *) thread_return_args[i];
         printf("Thread %d said: %s\n", i, res);
         free(res);
     }
 
     printf("\n=== {string_t} ===\n\n");
 
-    err = create_join_thread_string_t(rets, n_threads, sayHelloToSomeone_string_t_thfunc, "Tom", "-");
+    err = create_join_thread_string_t(thread_return_args, tids, N_threads, &th_attr, sayHelloToSomeone_string_t_thfunc,
+                                      "Tom", "-");
     printf("err: %d\n", err);
 
     /**
      * print out results
      **/
 
-    for (int i = 0; i < n_threads; ++i) {
-        string_t *res = (string_t *) rets[i];
+    for (int i = 0; i < N_threads; ++i) {
+        string_t *res = (string_t *) thread_return_args[i];
         printf("Thread %d said: %s\n", i, res->data);
         free(res->data);
         free(res);
@@ -114,8 +131,10 @@ void *sayHelloToSomeone_string_t_thfunc(void *arg)
     //return NULL;
 }
 
-int duplicateAndConcatenate(char **res, int *ptr_len_res,
-    const char src[], const char separator[], int n_copies)
+int duplicateAndConcatenate(
+    char **res, int *ptr_len_res,
+    const char src[], const char separator[],
+    int n_copies)
 {
     //printf(">>> in duplicateAndConcatenate():\n");
 
@@ -150,65 +169,11 @@ int duplicateAndConcatenate(char **res, int *ptr_len_res,
     return 0;
 }
 
-int create_join_thread_string_t(void *rets[], int n_threads, thread_func_t thread_func,
-    const char src[], const char separator[])
+int create_join_thread_cstring(
+    void *thread_return_args[], pthread_t tids[], int n_threads,
+    const pthread_attr_t *th_attr, thread_func_t thread_func, const char src[],
+    const char separator[])
 {
-    pthread_t tids[n_threads] = {};
-
-    pthread_attr_t th_attr;
-    pthread_attr_init(&th_attr);
-    pthread_attr_setschedpolicy(&th_attr, SCHED_FIFO);
-
-    /**
-     * - exit_status defined in a pointer to string_t
-     * - It must be a pointer, because we need to allocate heap memory instead of using stack memory.
-     * - It points to a string_t variable that is what a thread creates.
-     *
-     * pthread_create
-     **/
-
-    // struct MyString, string_t
-    string_t whole_strs[n_threads] = {}; // an array of names (string, char array)
-    for (int i = 0; i < n_threads; ++i) {
-        printf("[Main Thread] duplicateAndConcatenate()\n");
-        int err = duplicateAndConcatenate(&whole_strs[i].data, &whole_strs[i].len,
-            src, separator, 1 + i);
-        if (err != 0) { return 1; }
-
-        err = pthread_create(&tids[i], &th_attr, thread_func, &whole_strs[i]);
-        if (err != 0) {
-            perror("pthread_create");
-            fprintf(stderr, "errcode %d: %s\n", err, strerror(err));
-            return 1;
-        }
-        //free(names[i].data);
-    }
-
-    /**
-     * pthread_join
-     * */
-
-    for (int i = 0; i < n_threads; ++i) {
-        int err = pthread_join(tids[i], &rets[i]);
-        if (err != 0) {
-            perror("pthread_create");
-            fprintf(stderr, "errcode %d: %s\n", err, strerror(err));
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-int create_join_thread_cstring(void *rets[], int n_threads, thread_func_t thread_func,
-    const char src[], const char separator[])
-{
-    pthread_t tids[n_threads] = {};
-
-    pthread_attr_t th_attr;
-    pthread_attr_init(&th_attr);
-    pthread_attr_setschedpolicy(&th_attr, SCHED_FIFO);
-
     /**
      * - exit_status defined in a pointer to c-string {char *}
      * - the c-string is exactly what a thread creates
@@ -226,7 +191,7 @@ int create_join_thread_cstring(void *rets[], int n_threads, thread_func_t thread
             src, separator, 1 + i);
         if (err != 0) { return 1; }
 
-        err = pthread_create(&tids[i], &th_attr, thread_func, &whole_strs[i]);
+        err = pthread_create(&tids[i], th_attr, thread_func, &whole_strs[i]);
         if (err != 0) {
             perror("pthread_create");
             fprintf(stderr, "errcode %d: %s\n", err, strerror(err));
@@ -240,7 +205,7 @@ int create_join_thread_cstring(void *rets[], int n_threads, thread_func_t thread
      * */
 
     for (int i = 0; i < n_threads; ++i) {
-        int err = pthread_join(tids[i], &rets[i]);
+        int err = pthread_join(tids[i], &thread_return_args[i]);
         if (err != 0) {
             perror("pthread_create");
             fprintf(stderr, "errcode %d: %s\n", err, strerror(err));
@@ -250,3 +215,50 @@ int create_join_thread_cstring(void *rets[], int n_threads, thread_func_t thread
 
     return 0;
 }
+
+int create_join_thread_string_t(
+    void *thread_return_args[], pthread_t tids[], int n_threads,
+    const pthread_attr_t *th_attr, thread_func_t thread_func, const char src[],
+    const char separator[])
+{
+    /**
+     * - exit_status defined in a pointer to string_t
+     * - It must be a pointer, because we need to allocate heap memory instead of using stack memory.
+     * - It points to a string_t variable that is what a thread creates.
+     *
+     * pthread_create
+     **/
+
+    // struct MyString, string_t
+    string_t whole_strs[n_threads] = {}; // an array of names (string, char array)
+    for (int i = 0; i < n_threads; ++i) {
+        printf("[Main Thread] duplicateAndConcatenate()\n");
+        int err = duplicateAndConcatenate(&whole_strs[i].data, &whole_strs[i].len,
+            src, separator, 1 + i);
+        if (err != 0) { return 1; }
+
+        err = pthread_create(&tids[i], th_attr, thread_func, &whole_strs[i]);
+        if (err != 0) {
+            perror("pthread_create");
+            fprintf(stderr, "errcode %d: %s\n", err, strerror(err));
+            return 1;
+        }
+        //free(names[i].data);
+    }
+
+    /**
+     * pthread_join
+     * */
+
+    for (int i = 0; i < n_threads; ++i) {
+        int err = pthread_join(tids[i], &thread_return_args[i]);
+        if (err != 0) {
+            perror("pthread_create");
+            fprintf(stderr, "errcode %d: %s\n", err, strerror(err));
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
