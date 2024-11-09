@@ -8,7 +8,7 @@
 #include <math.h>
 
 #define BUFFER_SIZE 3
-scientific_notation_t g_buffer[BUFFER_SIZE];
+PowerNotation g_buffer[BUFFER_SIZE];
 //int g_capacity = BUFFER_SIZE - 1; //
 
 int g_writeIndex = 0 % BUFFER_SIZE; // ensure index less than buffer size
@@ -42,8 +42,8 @@ bool isFull_globalCount(void) { return (g_count == BUFFER_SIZE); }
 // Write a value to the circular array
 void *writeToCircular_global(const void *dataIn)
 {
-    scientific_notation_t *target = &g_buffer[g_writeIndex];
-    *target = *((scientific_notation_t *) dataIn); // copy assignment of struct type
+    PowerNotation *target = &g_buffer[g_writeIndex];
+    *target = *((PowerNotation *) dataIn); // copy assignment of struct type
     target->value_in_decimal = target->coefficient * pow(target->base, target->exponent);
     printf("\nwrite: [%d] %.2f\n", g_writeIndex, target->value_in_decimal);
     g_writeIndex = (g_writeIndex + 1) % BUFFER_SIZE; // update index
@@ -56,7 +56,7 @@ void *writeToCircular_global(const void *dataIn)
 void *readFromCircular_global(void *dataOut)
 {
     dataOut = (void *) &g_buffer[g_readIndex];
-    printf("\nread: [%d] %.2f\n", g_readIndex, ((scientific_notation_t *) dataOut)->value_in_decimal);
+    printf("\nread: [%d] %.2f\n", g_readIndex, ((PowerNotation *) dataOut)->value_in_decimal);
     g_readIndex = (g_readIndex + 1) % BUFFER_SIZE;
     printf("update: g_idx_out <- %d\n", g_readIndex);
     g_count--;
@@ -73,7 +73,7 @@ int test_isFullEmpty_global(isFullEmptyGlobalFunc_t isFull, isFullEmptyGlobalFun
     // Write some values to the circular array
     for (int i = 0; i < 2 * BUFFER_SIZE; i++) {
         if (!isFull()) {
-            scientific_notation_t num = { i, 10, i, 0};
+            PowerNotation num = { i, 10, i, 0};
             writeToCircular_global(&num);
         }
         else {
@@ -85,7 +85,7 @@ int test_isFullEmpty_global(isFullEmptyGlobalFunc_t isFull, isFullEmptyGlobalFun
     // Read and print values from the circular array
     while (1) {
         if (!isEmpty()) {
-            scientific_notation_t value;
+            PowerNotation value;
             readFromCircular_global(&value);
             printf("value read out and stored at 0x%p\n", &value);
         } else {
