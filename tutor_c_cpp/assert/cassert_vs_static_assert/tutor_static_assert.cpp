@@ -49,7 +49,7 @@ int test_static_assert_gfg(void)
     //static_assert("Passed?", num1 == 100); // (expr, msg)
 
     int num2 = 100; // local variable is not assigned at compile time
-    //static_assert(num2 == 100, "Passed"); // fails
+    static_assert(num2 == 100, "Passed"); // fails
 
     static_assert(sizeof(unsigned int) * CHAR_BIT == 32);
     std::string str1 = "hey bro!: " + std::to_string(CHAR_BIT);
