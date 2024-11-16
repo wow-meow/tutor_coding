@@ -7,7 +7,7 @@ Contains mathematical operations and their corresponding tests.
 
 # Standard library imports
 import logging
-from typing import Union, Optional
+from typing import Union
 import os
 
 # Third-party imports (if any)
