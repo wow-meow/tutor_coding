@@ -35,7 +35,7 @@ def write_to_file(content: str, filepath: str = FILE_PATH) -> None:
         IOError: If there is an error writing to the file, with details about the specific error.
     """
     try:
-        with open(filepath, 'a', encoding=ENCODING) as f:
+        with open(filepath, 'w', encoding=ENCODING) as f:
             f.write(content + "\n")
     except IOError as e:
         logger.error(f"Failed to write to file: {e}")
