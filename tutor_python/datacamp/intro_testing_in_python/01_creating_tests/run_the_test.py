@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+
 import pytest
 
-with open('hello_world.txt', 'w') as hello_file:
-    hello_file.write('Hello, world!')
+with open('hello_world.txt', 'a') as hello_file:
+    hello_file.write("Hello, World!\n")
 
 def multiple_of_two(number):
     try:
@@ -26,3 +28,20 @@ def test_multiple_of_two():
     # Test non-numeric input
     with pytest.raises(ValueError, match="Input must be a number"):
         multiple_of_two("not a number")
+    
+    # Test negative numbers
+    assert multiple_of_two(-4) == True
+    assert multiple_of_two(-3) == False
+    
+    # Test floating point numbers
+    with pytest.raises(ValueError, match="Input must be a number"):
+        multiple_of_two(3.14)
+
+def divide(a, b):
+    if b == 0:
+        raise ZeroDivisionError("Cannot divide by zero!")
+    return a / b
+
+def test_divide():
+    with pytest.raises(ZeroDivisionError, match="Cannot divide by zero!"):
+        divide(10, 0)

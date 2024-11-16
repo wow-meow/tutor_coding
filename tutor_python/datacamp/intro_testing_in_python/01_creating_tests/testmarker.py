@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pytest
 from datetime import datetime
 
