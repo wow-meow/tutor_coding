@@ -12,8 +12,6 @@
 
 #include <arpa/inet.h>
 
-#include <stdarg.h> // variadic func
-#include <errno.h>
 #include <fcnctl.h>
 
 #include <sys/time.h>
