@@ -10,8 +10,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "E:/msys64/clang64/bin/clang++.exe",
-            "intelliSenseMode": "windows-clang-x64"
+            "compilerPath": "E:/msys64/ucrt64/bin/g++.exe"
         }
     ],
     "version": 4
