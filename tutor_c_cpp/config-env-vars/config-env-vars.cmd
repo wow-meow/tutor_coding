@@ -19,16 +19,38 @@ if not exist "%MSYS2_PATH%/msys2_shell.cmd" (
 )
 
 :choose_env
+if not defined CONTINUE set "CONTINUE=1"
+if "%CONTINUE%"=="0" exit /b 0
+
 cls
 echo Choose MSYS2 Environment:
-echo [1] UCRT64 (Default)
-echo [2] CLANG64
-choice /c 12 /n /m "Select environment (1-2): "
+echo [1] UCRT64    - Modern Windows development (recommended)
+echo                 Uses Universal C Runtime, best Visual Studio compatibility
+echo.
+echo [2] CLANG64   - Clang-based development
+echo                 Modern compiler with faster compilation, good C++ support
+echo.
+echo [3] MINGW64   - Traditional MinGW development
+echo                 Classic GCC toolchain, good for legacy compatibility
+echo.
+echo [4] CLANGARM64 - ARM64 Windows development
+echo                  For ARM processors or cross-compilation
+echo.
+echo [5] MINGW32    - Legacy 32-bit development
+echo                  Only if you specifically need 32-bit support
+echo.
+choice /c 12345 /n /m "Select environment (1-5): "
 set ENV_CHOICE=%errorlevel%
 if %ENV_CHOICE%==1 (
     set "ENV_TYPE=ucrt64"
-) else (
+) else if %ENV_CHOICE%==2 (
     set "ENV_TYPE=clang64"
+) else if %ENV_CHOICE%==3 (
+    set "ENV_TYPE=mingw64"
+) else if %ENV_CHOICE%==4 (
+    set "ENV_TYPE=clangarm64"
+) else (
+    set "ENV_TYPE=mingw32"
 )
 
 :choose_shell
@@ -54,7 +76,8 @@ if %SHELL_CHOICE%==1 (
 ) else if %SHELL_CHOICE%==4 (
     goto choose_env
 ) else (
-    exit /b 0
+    set "CONTINUE=0"
+    goto choose_env
 )
 
 :: Check if selected shell exists
@@ -71,4 +94,4 @@ if not exist "%MSYS2_PATH%/usr/bin/%SHELL_TYPE%.exe" (
 )
 
 :: Launch MSYS2 with selected options
-"%MSYS2_PATH%/msys2_shell.cmd" -defterm -here -no-start -%ENV_TYPE% -shell %SHELL_TYPE%
+"%MSYS2_PATH%/msys2_shell.cmd" -defterm -no-start -here -%ENV_TYPE% -shell %SHELL_TYPE%
