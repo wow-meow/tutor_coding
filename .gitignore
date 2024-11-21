@@ -540,3 +540,4 @@ $RECYCLE.BIN/
 # add your custom gitignore here:
 !.gitignore
 !.gitsubmodules
+!config-env-vars.cmd
