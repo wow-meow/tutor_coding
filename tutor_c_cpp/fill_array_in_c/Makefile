@@ -1,8 +1,8 @@
 # Choose compiler
-CC := gcc
-CFLAG = -Wall 
-#CC := clang
-#CFLAG = -g -Wall 
+#CC := gcc
+#CFLAG = -Wall 
+CC:= clang
+CFLAG = -g -Wall 
 
 # Choose language standard
 #CFLAG += -std=c2x
@@ -17,7 +17,7 @@ CFLAG += -std=c17
 SRC_DIR = ./src
 BUILD_DIR = ./build
 
-TARGET = $(BUILD_DIR)/main.out
+TARGET = $(BUILD_DIR)/main.$(CC).out
 
 # ./src/*.c
 SRCS = $(wildcard $(SRC_DIR)/*.c)
