@@ -8,13 +8,18 @@ int main(void)
 
     // Use counter directly
     g_count = 42;
-    printf("Counter set to: %d\n", g_count);
-
+    printf("g_count = %d\n", g_count);
+    
     // Use through functions
-    increment_counter(); // Will print counter value
-    increment_counter(); // Will print counter value
+    increment_counter(); // Print counter value
+    increment_counter(); // Print counter value
 
-    printf("Final counter value: %d\n", get_counter());
+    blob_t buffForCounters; 
+    get_counters(&buffForCounters);
+    printf("Final values of counters:\n");
+    printf("g_count = %d\n", buffForCounters.buff_for_global);
+    printf("sg_count = %d\n", buffForCounters.buff_for_static_global);
+    printf("sl_count = %d\n", buffForCounters.buff_for_static_local);
 
     return 0;
 }
