@@ -3,6 +3,7 @@
         "fill_array.h": "c",
         "cstdlib": "c",
         "stdio.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "globals.h": "c"
     }
 }
