@@ -2,9 +2,12 @@
 #include <stdlib.h> // malloc
 #include "fill_array.h"
 
-static const int LenGIArr = 10;
+#define LEN_GIARR 10
+
+static const int LenGIArr = LEN_GIARR;
 int g_count;
-int g_iArr[LenGIArr];
+//int g_iArr[LenGIArr];
+int g_iArr[LEN_GIARR];
 
 int copyToGlobalArray(int arr[], int len, int *startIndex) ;
 
@@ -17,6 +20,7 @@ int main()
     int startIndex = 0;
     int err = 0;
     err = fillArray(iArr, len);
+    
     err = copyToGlobalArray(iArr, len, &startIndex);
     err = copyToGlobalArray(iArr, len, &startIndex);
 
@@ -24,7 +28,7 @@ int main()
     return 0;
 }
 
-int copyToGlobalArray(int arr[], int len, int *startIndex) 
+int copyToGlobalArray(int arr[], int len, int *startIndex)
 {
     for (int i = *startIndex; i < len; ++i) {
         if (i >= LenGIArr) { break; }
