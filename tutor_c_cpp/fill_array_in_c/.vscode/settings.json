@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "fill_array.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }

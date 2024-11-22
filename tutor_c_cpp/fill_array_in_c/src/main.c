@@ -8,7 +8,7 @@ int g_iArr[LenGIArr];
 
 int copyToGlobalArray(int arr[], int len, int *startIndex) ;
 
-int main() 
+int main()
 {
     printf("\nHello, World!\n\n");
 
