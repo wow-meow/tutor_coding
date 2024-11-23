@@ -6,7 +6,7 @@ int main(void)
 {
     printf("Initial counter value: %d\n", g_count);
 
-    // Use counter directly
+    // Use global variables directly
     g_count = 42;
     printf("g_count = %d\n", g_count);
     
