@@ -3,8 +3,9 @@ SRC_FTYPE := c
 # CC can be gcc, g++, clang, clang++
 CC := clang
 
-CFLAG = -g # generate debug info 
-CFLAG += -Wall # warning, all
+CFLAG = -g # generate debug info, works best with -O0 and -O1
+CFLAG += -Wall # warn all
+CFLAG += -O0 # compiler optimization level
 
 # cflag options: -std=c2x, -std=gnu2x, -std=c++2x, -std=gnu++2x
 CFLAG += -std=gnu17
