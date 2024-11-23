@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "clang64",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "configurationProvider": "ms-vscode.makefile-tools",
+            "compilerPath": "E:/msys64/clang64/bin/clang.exe",
+            "compilerArgs": [
+                "-g",
+                "-Wall"
+            ],
+            "intelliSenseMode": "windows-clang-x64",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
