@@ -2,7 +2,12 @@
 #include <vector>
 #include <string>
 
-using namespace std;
+// Avoid using the entire namespace
+//using namespace std;
+using std::vector;
+using std::string;
+using std::cout;
+using std::endl;
 
 int main()
 {
