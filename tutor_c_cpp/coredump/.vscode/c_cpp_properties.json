@@ -17,8 +17,8 @@
                 "-Wall"
             ],
             "intelliSenseMode": "windows-clang-x64",
-            "cStandard": "c17",
-            "cppStandard": "c++17"
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17"
         }
     ],
     "version": 4

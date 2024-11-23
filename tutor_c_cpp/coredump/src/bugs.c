@@ -36,8 +36,8 @@ int create_segfault()
             *goodptr = rnum; // Write the random number to the allocated memory
         }
 
-        printf("Random number: %d\n", rnum); // Print the generated random number
-        usleep(10000); // Sleep for 10 milliseconds to slow down the loop
+        printf("random: %d\n", rnum); // Print the generated random number
+        usleep(1000); // Sleep for 1000 useconds to slow down the loop
     }
     
     return 0;
