@@ -1,11 +1,15 @@
-#SRC_FTYPE := c
-#CC := can be gcc, g++, clang, clang++
+# SRC_FTYPE can be .c or .cpp
 SRC_FTYPE := cpp
+# CC can be gcc, g++, clang, clang++
 CC := clang++
 
-CFLAG = -g -Wall 
-#CFLAG += -std=c2x
+CFLAG = -g # generate debug info 
+CFLAG += -Wall # warning, all
+
+# cflag options: -std=c2x, -std=gnu2x, -std=c++2x, -std=gnu++2x
 CFLAG += -std=gnu++17
+
+# link required libs
 #CFLAG += -lpthread
 #CFLAG += -lunistd
 #CFLAG += -D _BSD_SOURCE # for usleep() in unistd.h

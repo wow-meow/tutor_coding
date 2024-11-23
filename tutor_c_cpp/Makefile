@@ -1,7 +1,15 @@
-CC := gcc
-CFLAG = -Wall 
-#CFLAG += -std=c2x
-CFLAG += -std=c17
+# SRC_FTYPE can be .c or .cpp
+SRC_FTYPE := cpp
+# CC can be gcc, g++, clang, clang++
+CC := clang++
+
+CFLAG = -g # generate debug info 
+CFLAG += -Wall # warning, all
+
+# cflag options: -std=c2x, -std=gnu2x, -std=c++2x, -std=gnu++2x
+CFLAG += -std=gnu++17
+
+# link required libs
 #CFLAG += -lpthread
 #CFLAG += -lunistd
 #CFLAG += -D _BSD_SOURCE # for usleep() in unistd.h
@@ -11,18 +19,18 @@ CFLAG += -std=c17
 SRC_DIR = ./src
 BUILD_DIR = ./build
 
-TARGET = $(BUILD_DIR)/main.out
+TARGET = $(BUILD_DIR)/main.$(CC).out
 
-# ./src/*.c
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+# ./src/*.$(SRC_FTYPE)
+SRCS = $(wildcard $(SRC_DIR)/*.$(SRC_FTYPE))
 
-# ./src/*.c --> ./build/*.o
-#OBJS = $(SRCS:.c=.o)
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
+# ./src/*.$(SRC_FTYPE) --> ./build/*.o
+#OBJS = $(SRCS:.$(SRC_FTYPE)=.o)
+OBJS = $(patsubst $(SRC_DIR)/%.$(SRC_FTYPE), $(BUILD_DIR)/%.o, $(SRCS))
 
-# ./src/*.c --> ./build/*.d
-#DEPS = $(SRCS:.c=.d)
-DEPS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.d, $(SRCS))
+# ./src/*.$(SRC_FTYPE) --> ./build/*.d
+#DEPS = $(SRCS:.$(SRC_FTYPE)=.d)
+DEPS = $(patsubst $(SRC_DIR)/%.$(SRC_FTYPE), $(BUILD_DIR)/%.d, $(SRCS))
 
 # The default final target
 all: $(TARGET)
@@ -39,8 +47,8 @@ $(TARGET): $(OBJS)
 # with which an implicit rule matches. It can also be thought of as the "stem"
 # part that matched in the rule definition's % bit.
 #
-# The rule of ./build/xyz.d <-- ./src/xyz.c
-$(BUILD_DIR)/%.d: $(SRC_DIR)/%.c
+# The rule of ./build/xyz.d <-- ./src/xyz.$(SRC_FTYPE)
+$(BUILD_DIR)/%.d: $(SRC_DIR)/%.$(SRC_FTYPE)
 	@echo '-- Generating dependencies for $<'
 	#@echo $$'\'$$*\' is $*'
 	mkdir -p $(dir $@); \
@@ -50,8 +58,8 @@ $(BUILD_DIR)/%.d: $(SRC_DIR)/%.c
 	rm -f $@.tmp
 	@echo
 
-# The rule of ./build/xyz.o <-- ./src/xyz.c
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+# The rule of ./build/xyz.o <-- ./src/xyz.$(SRC_FTYPE)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.$(SRC_FTYPE)
 	@echo '-- Building $@ <-- $< according to Pattern rules'
 	mkdir -p $(dir $@); \
 	$(CC) $(CFLAG) -c -o $@ $<
