@@ -1,4 +1,5 @@
 #include "bugs.h"
+#include <stdio.h> // printf
 #include <stdlib.h> // malloc
 #include <stdbool.h> // bool
 #include <unistd.h> // sleep
