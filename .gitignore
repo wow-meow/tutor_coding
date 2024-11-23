@@ -537,6 +537,9 @@ $RECYCLE.BIN/
 
 #################### Custom.gitignore ####################
 
+# core dumped file
+core.*
+
 # add your custom gitignore here:
 !.gitignore
 !.gitsubmodules
