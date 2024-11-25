@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 house_areas = ["hallway", 11.25, "kitchen", 18.0,
-        "chill zone", 20.0, "bedroom", 10.75,
-         "bathroom", 10.50, "poolhouse", 24.5,
-         "garage", 15.45]
+               "chill zone", 20.0, "bedroom", 10.75,
+               "bathroom", 10.50, "poolhouse", 24.5,
+               "garage", 15.45]
 
 # Delete the poolhouse items from the list
 del house_areas[(6-1)*2 : 6*2]
