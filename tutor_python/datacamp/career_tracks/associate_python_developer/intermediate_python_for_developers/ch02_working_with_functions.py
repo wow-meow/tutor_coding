@@ -156,7 +156,7 @@ print(concat("Python", "is", "great!"))
 
 
 # Define a function called concat
-def concat(**kwargs) -> str:
+def concat2(**kwargs) -> str:
     # Create an empty string
     result = ""
     # Iterate over the Python kwargs
@@ -166,4 +166,4 @@ def concat(**kwargs) -> str:
 
 
 # Call the function
-print(concat(start="Python", middle="is", end="great!"))
+print(concat2(start="Python", middle="is", end="great!"))
