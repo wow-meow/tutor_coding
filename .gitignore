@@ -544,3 +544,4 @@ core.*
 !.gitignore
 !.gitsubmodules
 !config-env-vars.cmd
+!tutor_win_cmd_scripts/*.cmd
